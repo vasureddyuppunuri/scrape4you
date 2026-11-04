@@ -1,6 +1,6 @@
-# 🕷️ CrawlX — Next-Gen Stealth Web Extraction Engine
+# 🕷️ Scrape4you (CrawlX) — Autonomous AI Web Scraping & Stealth Extraction Engine
 
-> **Self-hosted, open-source Firecrawl alternative** with stealth browser automation, intelligent content extraction, and LLM-ready output.
+> **Autonomous AI web-scraping and multi-source extraction engine** with stealth browser automation, intelligent content extraction, zero-hallucination evidence quotes, and endpoint security.
 
 ---
 
