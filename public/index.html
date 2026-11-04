@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrape4you</title>
+  <meta name="description" content="Fast, clean web search and deep scraping platform.">
+  <!-- Google Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- ═══ Background Grid & Glow (Clean White & Balanced Accents) ═══ -->
+  <div class="bg-grid-animation" aria-hidden="true">
+    <div class="grid-mesh"></div>
+    <div class="orb-glow orb-pink"></div>
+    <div class="orb-glow orb-orange"></div>
+    <div class="orb-glow orb-blue"></div>
+  </div>
+
+  <!-- ═══ Clean Nav Bar ═══ -->
+  <header class="app-header">
+    <div class="nav-island">
+      <a href="#" class="brand-wrapper" onclick="resetToHome(event)">
+        <div class="brand-mark">
+          <span class="material-symbols-outlined" style="font-size:20px;color:#ffffff;">search</span>
+        </div>
+        <span class="brand-title">Scrape4you</span>
+      </a>
+
+      <nav class="nav-pills">
+        <button class="nav-pill active" data-mode="web" onclick="switchSearchMode('web')">
+          <span class="material-symbols-outlined nav-icon">public</span>
+          <span>Web Search</span>
+        </button>
+        <button class="nav-pill" data-mode="site" onclick="switchSearchMode('site')">
+          <span class="material-symbols-outlined nav-icon">language</span>
+          <span>Specific Site</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ═══ Main Center Canvas ═══ -->
+  <main class="main-canvas">
+
+    <!-- Hero Section -->
+    <div class="hero-centerpiece">
+   
+      <h1 class="hero-heading">
+        Search any topic. <br>
+        <span class="gradient-word">Scrape data in detail.</span>
+      </h1>
+      <p class="hero-subheading">
+        Search across top websites and extract clean, comprehensive answers instantly.
+      </p>
+    </div>
+
+    <!-- Centerpiece Search Box -->
+    <div class="search-box-wrapper">
+      <div class="search-card">
+        <div class="search-input-row">
+          <span class="material-symbols-outlined search-input-icon">search</span>
+          <textarea 
+            id="mainSearchInput" 
+            class="search-field-input" 
+            rows="2" 
+            placeholder="Type what you want to scrape or search in depth... (e.g. React technical interview questions and answers)"
+            autocomplete="off" 
+            spellcheck="false"
+          ></textarea>
+        </div>
+
+        <!-- Target Site input for Specific Site mode -->
+        <div class="site-target-row" id="siteTargetRow">
+          <span class="material-symbols-outlined site-input-icon">link</span>
+          <input type="text" id="siteTargetUrl" class="site-target-input" placeholder="Enter target site URL (e.g. geeksforgeeks.org, leetcode.com, stripe.com)">
+        </div>
+
+        <div class="search-card-footer">
+          <div class="mode-toggle-group">
+            <button type="button" class="mode-switch-btn active" id="btnToggleWeb" onclick="switchSearchMode('web')">
+              <span class="material-symbols-outlined btn-icon-sm">travel_explore</span>
+              <span>All Web</span>
+            </button>
+            <button type="button" class="mode-switch-btn" id="btnToggleSite" onclick="switchSearchMode('site')">
+              <span class="material-symbols-outlined btn-icon-sm">domain</span>
+              <span>Single Domain</span>
+            </button>
+          </div>
+
+          <button class="search-btn-primary" id="btnRunSearch" onclick="executeSearch()">
+            <span>Scrape Now</span>
+            <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggested Query Chips -->
+    <div class="quick-chips-wrapper">
+      <span class="chip-label">Quick Scrapes:</span>
+      <button class="query-chip" onclick="applySuggestion('interview')">React Interview Q&A</button>
+      <button class="query-chip" onclick="applySuggestion('python')">Python Coding Challenges</button>
+      <button class="query-chip" onclick="applySuggestion('sysdesign')">System Design Patterns</button>
+      <button class="query-chip" onclick="applySuggestion('pricing')">SaaS Pricing Comparison</button>
+      <button class="query-chip" onclick="applySuggestion('display')"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:2px;color:var(--color-orange);">photo_library</span>/display Media</button>
+    </div>
+
+    <!-- ═══ Smooth Hovering Box Loading Animation (Slides up from bottom) ═══ -->
+    <div class="loading-floating-card" id="loadingFloatingCard">
+      <div class="loading-spinner-circle">
+        <div class="spinner-track-inner"></div>
+      </div>
+      <div class="loading-info-block">
+        <div class="loading-headline" id="loadingHeadline">Searching across the web...</div>
+        <div class="loading-subtext" id="loadingSubtext">Extracting full details and formatting clean answers</div>
+      </div>
+      <div class="loading-timer-badge" id="loadingElapsedTimer">0.0s (Limit 60s)</div>
+    </div>
+
+    <!-- ═══ Clean Results Section (Properly framed questions & answers) ═══ -->
+    <div class="results-container" id="resultsContainer">
+      <div class="results-top-bar">
+        <div class="results-meta-left">
+          <span class="material-symbols-outlined" style="font-size:18px;color:#059669;">check_circle</span>
+          <span class="result-badge-success">Ready</span>
+          <span style="font-size: 0.8rem; color: var(--color-slate-500);" id="resultStatsMeta">Completed</span>
+        </div>
+        <div class="results-actions-group">
+          <button class="action-btn-clean" onclick="triggerDisplayForCurrentQuery()" title="Display social media & images for this topic">
+            <span class="material-symbols-outlined" style="font-size:16px;color:var(--color-orange);">photo_library</span>
+            <span>/display</span>
+          </button>
+          <button class="action-btn-clean" onclick="copyCleanResult()" title="Copy content to clipboard">
+            <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span>
+            <span>Copy</span>
+          </button>
+          <button class="action-btn-clean" onclick="downloadCleanDocument()" title="Download as Document">
+            <span class="material-symbols-outlined" style="font-size:16px;">download</span>
+            <span>Save</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Human-Formatted Render Area -->
+      <div class="human-content-body" id="humanResultArea">
+        <!-- Clean Q&A blocks rendered here -->
+      </div>
+
+      <!-- ═══ Follow-up Search Bar (Deep Dives & Thread Scraping) ═══ -->
+      <div class="followup-card" id="followupCard">
+        <div class="followup-header">
+          <div class="followup-header-left">
+            <span class="material-symbols-outlined followup-icon">forum</span>
+            <span class="followup-title">Follow-Up Scraping</span>
+          </div>
+          <span class="followup-subtitle">Ask a deeper question on this topic or scrape specific aspects</span>
+        </div>
+        <div class="followup-input-row">
+          <input 
+            type="text" 
+            id="followupInput" 
+            class="followup-input-field" 
+            placeholder="Ask a follow-up query to scrape deeper (e.g. give code examples, explain edge cases)..."
+            autocomplete="off"
+          />
+          <button class="followup-submit-btn" id="btnRunFollowup" onclick="executeFollowup()">
+            <span>Follow-Up</span>
+            <span class="material-symbols-outlined" style="font-size:16px;">arrow_upward</span>
+          </button>
+        </div>
+        <div class="followup-chips">
+          <button type="button" class="followup-chip" onclick="applyFollowupChip('Provide complete code implementation with examples')">+ Code Implementation</button>
+          <button type="button" class="followup-chip" onclick="applyFollowupChip('What are common bugs, pitfalls, and edge cases?')">+ Edge Cases & Pitfalls</button>
+          <button type="button" class="followup-chip" onclick="applyFollowupChip('How does this compare with the top alternatives?')">+ Compare Alternatives</button>
+          <button type="button" class="followup-chip" onclick="triggerDisplayForCurrentQuery()"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;color:var(--color-orange);">photo_library</span> /display Social & Images</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Lightbox Modal for /display images -->
+  <div class="lightbox-modal" id="imageLightboxModal" onclick="closeLightbox(event)">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <img id="lightboxImg" src="" alt="Enlarged preview">
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+      <a id="lightboxSourceLink" href="#" target="_blank" rel="noopener noreferrer" class="lightbox-link">Visit Source Page ↗</a>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
